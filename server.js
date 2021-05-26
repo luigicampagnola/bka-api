@@ -7,6 +7,24 @@ const database = {
       name: "john",
       email: "john@gmail.com",
       password: "123",
+      joined: new Date(),
+      transactions: {
+        movements: [
+          {
+            id: 0,
+            Type: "Deposit",
+            Date: "05/23/2021 at 17:11",
+            Amount: 0,
+          },
+        ],
+      },
+    },
+    {
+      id: "124",
+      name: "carl",
+      email: "carl@gmail.com",
+      password: "1234",
+      joined: new Date(),
       transactions: {
         movements: [
           {
@@ -29,7 +47,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  res.json("signing");
+  if (
+    req.body.email === database.users[0].email &&
+    req.body.password === database.users[0].password
+  ) {
+    res.json("success");
+  } else {
+      res.status(400).json('error logging in')
+  }
 });
 
 app.listen(3000, () => {
@@ -44,3 +69,4 @@ app.listen(3000, () => {
   /transactions --> PUT --> user
 
 */
+
