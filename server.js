@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcrypt-nodejs");
 
 const database = {
   users: [
@@ -37,6 +38,13 @@ const database = {
       },
     },
   ],
+  login: [
+    {
+      id: "987",
+      hash: "",
+      email: "john@gmail.com",
+    },
+  ],
 };
 
 const app = express();
@@ -47,6 +55,21 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  // Load hash from your password DB.
+  bcrypt.compare(
+    "123456",
+    "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
+    function (err, res) {
+      console.log("first guess", res);
+    }
+  );
+  bcrypt.compare(
+    "veggies",
+    "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
+    function (err, res) {
+      console.log("second guess", res);
+    }
+  );
   if (
     req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password
@@ -59,6 +82,9 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
+  bcrypt.hash(password, null, null, function (err, hash) {
+    console.log(hash);
+  });
   database.users.push({
     id: "125",
     name: name,
@@ -110,4 +136,3 @@ app.post("/transactions", (req, res) => {
 app.listen(3000, () => {
   console.log("app is running on port 3000");
 });
-
