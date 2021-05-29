@@ -13,9 +13,9 @@ const database = {
       transactions: {
         movements: [
           {
-            id: 0,
+            id: 1,
             Type: "Deposit",
-            Date: "05/23/2021 at 17:11",
+            Date: "00/00/0000 at 00:00",
             Amount: 0,
           },
         ],
@@ -95,10 +95,10 @@ app.post("/register", (req, res) => {
     transactions: {
       movements: [
         {
-          id: 0,
+          id: 15,
           Type: "Deposit",
-          Date: "05/23/2021 at 17:11",
-          Amount: 0,
+          Date: "01/02/21",
+          Amount: 10,
         },
       ],
     },
@@ -120,18 +120,27 @@ app.get("/profile/:id", (req, res) => {
   }
 });
 
-app.post("/transactions", (req, res) => {
-  const { id } = req.body;
+app.put("/transactions", (req, res) => {
+  const { id, movements } = req.body;
   let found = false;
   database.users.forEach((user) => {
     if (user.id === id) {
       found = true;
-      return res.json(user.transactions);
+/*       user.transactions.transactions.push({
+        id: 0,
+        Type: "Deposit",
+        Date: "05/30/2021 at 17:11",
+        Amount: 13,
+      }); */
+      return res.json(user.transactions.movements);
     }
   });
   if (!found) {
     res.status(400).json("not found");
   }
+/*   database.users.forEach((users) => {
+    users.transactions;
+  }); */
 });
 
 app.listen(3000, () => {
