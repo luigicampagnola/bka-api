@@ -128,19 +128,12 @@ app.put("/transactions", (req, res) => {
     if (user.id === id) {
       found = true;
       database.users[0].transactions.movements.push(movements);
-
-      /*       movements.forEach(move=> {
-
-      }) */
       return res.json(user.transactions.movements);
     }
   });
   if (!found) {
     res.status(400).json("not found");
   }
-  /*   database.users.forEach((users) => {
-    users.transactions;
-  }); */
 });
 
 app.listen(3000, () => {
