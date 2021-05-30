@@ -14,9 +14,9 @@ const database = {
         movements: [
           {
             id: 1,
-            Type: "Deposit",
-            Date: "00/00/0000 at 00:00",
-            Amount: 2,
+            Type: "",
+            Date: "",
+            Amount: 0,
             DepositsAmount: [],
           },
         ],
@@ -127,7 +127,9 @@ app.put("/transactions", (req, res) => {
   database.users.forEach((user) => {
     if (user.id === id) {
       found = true;
-/*       movements.forEach(move=>{
+      database.users[0].transactions.movements.push(movements);
+
+      /*       movements.forEach(move=> {
 
       }) */
       return res.json(user.transactions.movements);
