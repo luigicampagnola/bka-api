@@ -13,9 +13,17 @@ const db = knex({
   },
 });
 
-db.select("*").from("users").then(data =>{
-  console.log(data);
-});
+db.select("*")
+  .from("users")
+  .then((data) => {
+    console.log(data);
+  });
+
+db.select("*")
+  .from("movements")
+  .then((data) => {
+    console.log(data);
+  });
 
 const database = {
   users: [
@@ -102,12 +110,19 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, null, null, function (err, hash) {
     console.log(hash);
   });
-  db('users').insert({
-    email: email,
-    name: name,
-    joined: new Date(),
-  }).then(console.log)
-/*   database.users.push({
+  /*   db("users")
+    .returning("*")
+    .insert({
+      email: email,
+      name: name,
+      joined: new Date(),
+    })
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch((err) => res.status(400).json("unable to register"));
+}); */
+  database.users.push({
     id: "125",
     name: name,
     email: email,
@@ -122,37 +137,43 @@ app.post("/register", (req, res) => {
         },
       ],
     },
-  }); */
-  res.json(database.users[database.users.length - 1]);
-});
+  });
 
-app.get("/profile/:id", (req, res) => {
-  const { id } = req.params;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user);
+  app.get("/profile/:id", (req, res) => {
+    const { id } = req.params;
+    let found = false;
+    database.users.forEach((user) => {
+      if (user.id === id) {
+        found = true;
+        return res.json(user);
+      }
+    });
+    if (!found) {
+      res.status(400).json("not found");
     }
   });
-  if (!found) {
-    res.status(400).json("not found");
-  }
-});
 
-app.put("/transactions", (req, res) => {
-  const { id, movements } = req.body;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      database.users[0].transactions.movements.push(movements);
-      return res.json(user.transactions.movements);
+  app.put("/transactions", (req, res) => {
+    const { id, movements } = req.body;
+    /*   db.select("id").from("movements")
+  .where("id", "=", id)
+  .update(movements)
+  .returning(movements)
+  .then(move=>{
+    console.log(move)
+  })  */
+    let found = false;
+    database.users.forEach((user) => {
+      if (user.id === id) {
+        found = true;
+        database.users[0].transactions.movements.push(movements);
+        return res.json(user.transactions.movements);
+      }
+    });
+    if (!found) {
+      res.status(400).json("not found");
     }
   });
-  if (!found) {
-    res.status(400).json("not found");
-  }
 });
 
 app.listen(3000, () => {
