@@ -110,7 +110,7 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, null, null, function (err, hash) {
     console.log(hash);
   });
-  /*   db("users")
+/*     db("users")
     .returning("*")
     .insert({
       email: email,
@@ -120,8 +120,9 @@ app.post("/register", (req, res) => {
     .then((user) => {
       res.json(user[0]);
     })
-    .catch((err) => res.status(400).json("unable to register"));
-}); */
+    .catch((err) => res.status(400).json("unable to register")); */
+
+
   database.users.push({
     id: "125",
     name: name,
