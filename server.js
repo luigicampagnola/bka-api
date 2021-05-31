@@ -1,13 +1,26 @@
 const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
+const knex = require("knex");
+
+const postgres = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    user: "postgres",
+    password: "",
+    database: "badb",
+  },
+});
+
+postgres.select("*").from("users");
 
 const database = {
   users: [
     {
       id: "123",
-      name: "john",
-      email: "john@gmail.com",
+      name: "Admin",
+      email: "admin@gmail.com",
       password: "123",
       joined: new Date(),
       transactions: {
@@ -17,7 +30,6 @@ const database = {
             Type: "",
             Date: "",
             Amount: 0,
-            DepositsAmount: [],
           },
         ],
       },
@@ -44,7 +56,7 @@ const database = {
     {
       id: "987",
       hash: "",
-      email: "john@gmail.com",
+      email: "admin@gmail.com",
     },
   ],
 };
