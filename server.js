@@ -99,7 +99,7 @@ app.post("/signin", (req, res) => {
     req.body.email === database.users[0].email &&
     req.body.password === database.users[0].password
   ) {
-    res.json(database.users[0]);
+    res.json(database.users[0] /* , database.movementsTable */);
   } else {
     res.status(400).json("error logging in");
   }
@@ -149,6 +149,15 @@ app.get("/profile/:id", (req, res) => {
   if (!found) {
     res.status(400).json("not found");
   }
+});
+
+app.put("/loadedTransactions", (req, res) => {
+  const { id } = req.body;
+  database.users.forEach((user) => {
+    if (user.id === id && database.movementsTable[0].id === id) {
+      return res.json(database.movementsTable);
+    }
+  });
 });
 
 app.put("/transactions", (req, res) => {
