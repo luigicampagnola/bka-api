@@ -33,16 +33,14 @@ const database = {
       email: "admin@gmail.com",
       password: "123",
       joined: new Date(),
-      transactions: {
-        movements: [
-          {
-            id: 1,
-            Type: "",
-            Date: "",
-            Amount: 0,
-          },
-        ],
-      },
+      movements: [
+        {
+          id: 1,
+          Type: "",
+          Date: "",
+          Amount: 0,
+        },
+      ],
     },
     {
       id: "124",
@@ -50,16 +48,14 @@ const database = {
       email: "carl@gmail.com",
       password: "1234",
       joined: new Date(),
-      transactions: {
-        movements: [
-          {
-            id: 0,
-            Type: "Withdrawal",
-            Date: "05/23/2021 at 17:11",
-            Amount: 0,
-          },
-        ],
-      },
+      movements: [
+        {
+          id: 0,
+          Type: "Withdrawal",
+          Date: "05/23/2021 at 17:11",
+          Amount: 0,
+        },
+      ],
     },
   ],
   login: [
@@ -110,7 +106,7 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, null, null, function (err, hash) {
     console.log(hash);
   });
-/*     db("users")
+  /*     db("users")
     .returning("*")
     .insert({
       email: email,
@@ -121,8 +117,6 @@ app.post("/register", (req, res) => {
       res.json(user[0]);
     })
     .catch((err) => res.status(400).json("unable to register")); */
-
-
   database.users.push({
     id: "125",
     name: name,
@@ -139,42 +133,43 @@ app.post("/register", (req, res) => {
       ],
     },
   });
+});
 
-  app.get("/profile/:id", (req, res) => {
-    const { id } = req.params;
-    let found = false;
-    database.users.forEach((user) => {
-      if (user.id === id) {
-        found = true;
-        return res.json(user);
-      }
-    });
-    if (!found) {
-      res.status(400).json("not found");
+app.get("/profile/:id", (req, res) => {
+  const { id } = req.params;
+  let found = false;
+  database.users.forEach((user) => {
+    if (user.id === id) {
+      found = true;
+      return res.json(user);
     }
   });
+  if (!found) {
+    res.status(400).json("not found");
+  }
+});
 
-  app.put("/transactions", (req, res) => {
-    const { id, movements } = req.body;
-    /*   db.select("id").from("movements")
+app.put("/transactions", (req, res) => {
+  const { id, movements } = req.body;
+  /*   db.select("id").from("movements")
   .where("id", "=", id)
   .update(movements)
   .returning(movements)
   .then(move=>{
     console.log(move)
   })  */
-    let found = false;
-    database.users.forEach((user) => {
-      if (user.id === id) {
-        found = true;
-        database.users[0].transactions.movements.push(movements);
-        return res.json(user.transactions.movements);
-      }
-    });
-    if (!found) {
-      res.status(400).json("not found");
+  let found = false;
+  database.users.forEach((user) => {
+    if (user.id === id) {
+      found = true;
+      database.users[0].movements.push(movements);
+      console.log(user.movements);
+      return res.json(user.movements);
     }
   });
+  if (!found) {
+    res.status(400).json("not found");
+  }
 });
 
 app.listen(3000, () => {
