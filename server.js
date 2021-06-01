@@ -58,6 +58,14 @@ const database = {
       ],
     },
   ],
+  movementsTable: [
+    {
+      id: "123",
+      Type: "Deposit",
+      Date: "13/03.1991",
+      Amount: 100,
+    },
+  ],
   login: [
     {
       id: "987",
@@ -80,16 +88,12 @@ app.post("/signin", (req, res) => {
   bcrypt.compare(
     "123456",
     "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
-    function (err, res) {
-      console.log("first guess", res);
-    }
+    function (err, res) {}
   );
   bcrypt.compare(
     "veggies",
     "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
-    function (err, res) {
-      console.log("second guess", res);
-    }
+    function (err, res) {}
   );
   if (
     req.body.email === database.users[0].email &&
@@ -103,9 +107,7 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
-  bcrypt.hash(password, null, null, function (err, hash) {
-    console.log(hash);
-  });
+  bcrypt.hash(password, null, null, function (err, hash) {});
   /*     db("users")
     .returning("*")
     .insert({
@@ -160,13 +162,19 @@ app.put("/transactions", (req, res) => {
   })  */
   let found = false;
   database.users.forEach((user) => {
-    if (user.id === id) {
+    if (user.id === id && database.movementsTable[0].id === id) {
       found = true;
-      database.users[0].movements.push(movements);
-      console.log(user.movements);
-      return res.json(user.movements);
+      database.movementsTable.push(movements);
+      return res.json(database.movementsTable);
     }
   });
+  /*   database.users.forEach((user) => {
+    if (user.id === id && user.movements.id === id) {
+      found = true;
+      database.users[0].movements.push(movements);
+      return res.json(user.movements);
+    }
+  }); */
   if (!found) {
     res.status(400).json("not found");
   }
