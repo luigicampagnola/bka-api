@@ -151,11 +151,15 @@ app.get("/profile/:id", (req, res) => {
   }
 });
 
-app.put("/loadedTransactions", (req, res) => {
+app.put("/loadedtransactions", (req, res) => {
   const { id } = req.body;
   database.users.forEach((user) => {
     if (user.id === id && database.movementsTable[0].id === id) {
+      console.log(database.movementsTable);
       return res.json(database.movementsTable);
+    } else {
+      console.log("not match found");
+      return res.status(400).json("could not load the transactions");
     }
   });
 });
