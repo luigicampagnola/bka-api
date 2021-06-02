@@ -65,6 +65,12 @@ const database = {
       Date: "13/03.1991",
       Amount: 100,
     },
+    {
+      id: "123",
+      Type: "Withdrawal",
+      Date: "13/03.1991",
+      Amount: 50,
+    },
   ],
   login: [
     {
@@ -153,8 +159,14 @@ app.get("/profile/:id", (req, res) => {
 
 app.put("/loadedtransactions", (req, res) => {
   const { id } = req.body;
-  database.users.forEach((user) => {
-    if (user.id === id && database.movementsTable[0].id === id) {
+/*   const transactionMovement = database.movementsTable.map((move, i) => {
+    if (id === move.id) {
+      return move;
+    }
+  }); */
+
+  database.users.forEach((user, i) => {
+    if (user.id === id && database.movementsTable[i].id === id) {
       return res.json(database.movementsTable);
     }
   });
