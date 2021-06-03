@@ -157,6 +157,13 @@ app.put("/loadedtransactions", (req, res) => {
       return move;
     }
   }); */
+   db.select("id").from("movements")
+  .where("id", "=", id)
+  .update(movements)
+  .returning(movements)
+  .then(move=>{
+    console.log(move)
+  })  
 
   database.users.forEach((user, i) => {
     if (user.id === id && database.movementsTable[i].id === id) {
