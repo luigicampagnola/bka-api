@@ -33,14 +33,6 @@ const database = {
       email: "admin@gmail.com",
       password: "123",
       joined: new Date(),
-      movements: [
-        {
-          id: 1,
-          Type: "",
-          Date: "",
-          Amount: 0,
-        },
-      ],
     },
     {
       id: "124",
@@ -101,9 +93,10 @@ app.post("/signin", (req, res) => {
     "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
     function (err, res) {}
   );
+  const { email, password } = req.body;
   if (
-    req.body.email === database.users[0].email &&
-    req.body.password === database.users[0].password
+    email === database.users[0].email &&
+    password === database.users[0].password
   ) {
     res.json(database.users[0] /* , database.movementsTable */);
   } else {
@@ -159,7 +152,7 @@ app.get("/profile/:id", (req, res) => {
 
 app.put("/loadedtransactions", (req, res) => {
   const { id } = req.body;
-/*   const transactionMovement = database.movementsTable.map((move, i) => {
+  /*   const transactionMovement = database.movementsTable.map((move, i) => {
     if (id === move.id) {
       return move;
     }
