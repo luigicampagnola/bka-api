@@ -107,7 +107,7 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
   bcrypt.hash(password, null, null, function (err, hash) {});
-  /*     db("users")
+  db("users")
     .returning("*")
     .insert({
       email: email,
@@ -117,8 +117,9 @@ app.post("/register", (req, res) => {
     .then((user) => {
       res.json(user[0]);
     })
-    .catch((err) => res.status(400).json("unable to register")); */
-  database.users.push({
+    .catch((err) => res.status(400).json("unable to register"));
+});
+/*   database.users.push({
     id: "125",
     name: name,
     email: email,
@@ -133,21 +134,20 @@ app.post("/register", (req, res) => {
         },
       ],
     },
-  });
-});
+  }); */
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id) {
-      found = true;
-      return res.json(user);
-    }
-  });
-  if (!found) {
-    res.status(400).json("not found");
-  }
+  db.select("*")
+    .from("users")
+    .where({
+      id: id,
+    })
+    .then((user) => {
+      res.json(user[0]);
+    })
+
+    .catch((err) => res.status(400).json("Profile not found"));
 });
 
 app.put("/loadedtransactions", (req, res) => {
@@ -157,13 +157,14 @@ app.put("/loadedtransactions", (req, res) => {
       return move;
     }
   }); */
-   db.select("id").from("movements")
-  .where("id", "=", id)
-  .update(movements)
-  .returning(movements)
-  .then(move=>{
-    console.log(move)
-  })  
+  db.select("id")
+    .from("movements")
+    .where("id", "=", id)
+    .update(movements)
+    .returning(movements)
+    .then((move) => {
+      console.log(move);
+    });
 
   database.users.forEach((user, i) => {
     if (user.id === id && database.movementsTable[i].id === id) {
