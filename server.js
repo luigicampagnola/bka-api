@@ -119,22 +119,6 @@ app.post("/register", (req, res) => {
     })
     .catch((err) => res.status(400).json("unable to register"));
 });
-/*   database.users.push({
-    id: "125",
-    name: name,
-    email: email,
-    joined: new Date(),
-    transactions: {
-      movements: [
-        {
-          id: 15,
-          Type: "Deposit",
-          Date: "01/02/21",
-          Amount: 10,
-        },
-      ],
-    },
-  }); */
 
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
@@ -144,10 +128,14 @@ app.get("/profile/:id", (req, res) => {
       id: id,
     })
     .then((user) => {
-      res.json(user[0]);
+      if (user.length) {
+        res.json(user[0]);
+      } else {
+        res.status(400).json("Profile not found");
+      }
     })
 
-    .catch((err) => res.status(400).json("Profile not found"));
+    .catch((err) => res.status(400).json("Error getting user"));
 });
 
 app.put("/loadedtransactions", (req, res) => {
