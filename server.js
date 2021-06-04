@@ -139,38 +139,55 @@ app.get("/profile/:id", (req, res) => {
 });
 
 app.put("/loadedtransactions", (req, res) => {
-  const { id } = req.body;
+  const { email } = req.body;
   /*   const transactionMovement = database.movementsTable.map((move, i) => {
     if (id === move.id) {
       return move;
     }
   }); */
-  db.select("id")
+  db.select("*")
     .from("movements")
-    .where("id", "=", id)
-    .update(movements)
+    .where("email", "=", email)
+    .then((move) => {
+      res.json(move);
+    });
+  /*     .update(movements)
     .returning(movements)
     .then((move) => {
       console.log(move);
-    });
+    }); */
 
-  database.users.forEach((user, i) => {
+  /*   database.users.forEach((user, i) => {
     if (user.id === id && database.movementsTable[i].id === id) {
       return res.json(database.movementsTable);
     }
-  });
+  }); */
 });
 
 app.put("/transactions", (req, res) => {
-  const { id, movements } = req.body;
-  /*   db.select("id").from("movements")
-  .where("id", "=", id)
-  .update(movements)
-  .returning(movements)
-  .then(move=>{
-    console.log(move)
-  })  */
-  let found = false;
+  const { email, type, date, amount, movements } = req.body;
+   db.select("email")
+    .from("movements")
+    .where("email", "=", email)
+    .insert({
+      type: type,
+      date: date,
+      amount: amount,
+      email: email,
+    })
+    .then((data) => {
+      res.json(data);
+    }); 
+/*    db.select("email")
+    .from("movements")
+    .where("email", "=", email)
+    .insert({
+      movements: movements,
+    })
+    .then((data) => {
+      res.json(data);
+    }); */
+  /*   let found = false;
   database.users.forEach((user) => {
     if (user.id === id && database.movementsTable[0].id === id) {
       found = true;
@@ -178,16 +195,10 @@ app.put("/transactions", (req, res) => {
       return res.json(database.movementsTable);
     }
   });
-  /*   database.users.forEach((user) => {
-    if (user.id === id && user.movements.id === id) {
-      found = true;
-      database.users[0].movements.push(movements);
-      return res.json(user.movements);
-    }
-  }); */
+
   if (!found) {
     res.status(400).json("not found");
-  }
+  } */
 });
 
 app.listen(3000, () => {
