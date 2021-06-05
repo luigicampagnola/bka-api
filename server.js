@@ -94,6 +94,7 @@ app.post("/signin", (req, res) => {
     function (err, res) {}
   );
   const { email, password } = req.body;
+
   if (
     email === database.users[0].email &&
     password === database.users[0].password
@@ -107,17 +108,28 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
   bcrypt.hash(password, null, null, function (err, hash) {});
-  db("users")
-    .returning("*")
-    .insert({
-      email: email,
-      name: name,
-      joined: new Date(),
-    })
-    .then((user) => {
-      res.json(user[0]);
-    })
-    .catch((err) => res.status(400).json("unable to register"));
+  const hash = bcrypt.hashSync(password);
+  db.transaction((trx) => {
+    trx
+      .inser({
+        hash: hash,
+        email: email,
+      })
+      .into("login")
+      .returning("email")
+      .then((loginEmail) => {
+        return trx("users")
+          .returning("*")
+          .insert({
+            email: loginEmail,
+            name: name,
+            joined: new Date(),
+          })
+          .then((user) => {
+            res.json(user[0]);
+          });
+      });
+  }).catch((err) => res.status(400).json("unable to register"));
 });
 
 app.get("/profile/:id", (req, res) => {
@@ -166,7 +178,7 @@ app.put("/loadedtransactions", (req, res) => {
 
 app.put("/transactions", (req, res) => {
   const { email, type, date, amount, movements } = req.body;
-   db.select("email")
+  db.select("email")
     .from("movements")
     .where("email", "=", email)
     .insert({
@@ -177,8 +189,8 @@ app.put("/transactions", (req, res) => {
     })
     .then((data) => {
       res.json(data);
-    }); 
-/*    db.select("email")
+    });
+  /*    db.select("email")
     .from("movements")
     .where("email", "=", email)
     .insert({
