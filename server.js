@@ -172,9 +172,16 @@ app.put("/loadedtransactions", (req, res) => {
   db.select("*")
     .from("movements")
     .where("email", "=", email)
-    .then((move) => {
-      res.json(move);
+    .then((data) => {
+      res.json(data);
     });
+  /*   db.select("*")
+    .from("movements")
+    .where("email", "=", email)
+    .then((move) => {
+      console.log(move);
+      res.json(move);
+    }); */
   /*     .update(movements)
     .returning(movements)
     .then((move) => {
@@ -200,6 +207,7 @@ app.put("/transactions", (req, res) => {
       email: email,
     })
     .then((data) => {
+      console.log(data);
       res.json(data);
     });
   /*    db.select("email")
