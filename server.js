@@ -15,15 +15,15 @@ const db = knex({
 
 db.select("*")
   .from("users")
-  .then((data) => {
-    console.log(data);
-  });
+  .then((data) => {});
 
 db.select("*")
   .from("movements")
-  .then((data) => {
-    console.log(data);
-  });
+  .then((data) => {});
+
+db.select("*")
+  .from("login")
+  .then((data) => {});
 
 const database = {
   users: [
@@ -78,37 +78,47 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send(database.users);
+  res.send("success");
 });
 
 app.post("/signin", (req, res) => {
-  // Load hash from your password DB.
-  bcrypt.compare(
-    "123456",
-    "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
-    function (err, res) {}
-  );
-  bcrypt.compare(
-    "veggies",
-    "$2a$10$x81NHeyZwkeWkB1NZ14os.yEJq0sMq.CcDT/z8Z0809Lx9iGezBSm",
-    function (err, res) {}
-  );
   const { email, password } = req.body;
-
-  if (
-    email === database.users[0].email &&
-    password === database.users[0].password
-  ) {
-    res.json(database.users[0] /* , database.movementsTable */);
-  } else {
-    res.status(400).json("error logging in");
-  }
+  db.select("email", "hash")
+    .from("login")
+    .where("email", "=", email)
+    .then((data) => {
+      console.log(data[0].hash);
+      const isValid = bcrypt.compareSync(password, data[0].hash);
+      console.log(isValid);
+      if (isValid === true) {
+        return db
+          .select("*")
+          .from("users")
+          .where("email", "=", email)
+          .then((user) => {
+            console.log(user);
+            res.json(user[0]);
+          })
+          .catch((err) => res.status(400).json("unable to get user"));
+      } else {
+        res.status(400).json("wrong credentials");
+      }
+    })
+    .catch((err) => res.status(400).json("login fail"));
 });
+
+/* 6/5/21 encountered a bug that didn't
+  allowed me to sign in, it seems like the bug happened
+  because I was using only NUMBERS as passwords for my users
+  when registering. After several hours of debbugging I created
+  a new user but with a string as a password and everything started 
+  working properly.
+*/
 
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
-  bcrypt.hash(password, null, null, function (err, hash) {});
   const hash = bcrypt.hashSync(password);
+  console.log(hash);
   db.transaction((trx) => {
     trx
       .insert({
@@ -121,7 +131,7 @@ app.post("/register", (req, res) => {
         return trx("users")
           .returning("*")
           .insert({
-            email: loginEmail,
+            email: loginEmail[0],
             name: name,
             joined: new Date(),
           })
