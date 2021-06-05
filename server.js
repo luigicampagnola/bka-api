@@ -164,35 +164,14 @@ app.get("/profile/:id", (req, res) => {
 
 app.put("/loadedtransactions", (req, res) => {
   const { email } = req.body;
-  /*   const transactionMovement = database.movementsTable.map((move, i) => {
-    if (id === move.id) {
-      return move;
-    }
-  }); */
+
   db.select("*")
     .from("movements")
     .where("email", "=", email)
     .then((data) => {
       res.json(data);
     });
-  /*   db.select("*")
-    .from("movements")
-    .where("email", "=", email)
-    .then((move) => {
-      console.log(move);
-      res.json(move);
-    }); */
-  /*     .update(movements)
-    .returning(movements)
-    .then((move) => {
-      console.log(move);
-    }); */
 
-  /*   database.users.forEach((user, i) => {
-    if (user.id === id && database.movementsTable[i].id === id) {
-      return res.json(database.movementsTable);
-    }
-  }); */
 });
 
 app.put("/transactions", (req, res) => {
@@ -210,15 +189,7 @@ app.put("/transactions", (req, res) => {
       console.log(data);
       res.json(data);
     });
-  /*    db.select("email")
-    .from("movements")
-    .where("email", "=", email)
-    .insert({
-      movements: movements,
-    })
-    .then((data) => {
-      res.json(data);
-    }); */
+
   /*   let found = false;
   database.users.forEach((user) => {
     if (user.id === id && database.movementsTable[0].id === id) {
