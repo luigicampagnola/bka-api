@@ -87,16 +87,13 @@ app.post("/signin", (req, res) => {
     .from("login")
     .where("email", "=", email)
     .then((data) => {
-      console.log(data[0].hash);
       const isValid = bcrypt.compareSync(password, data[0].hash);
-      console.log(isValid);
       if (isValid === true) {
         return db
           .select("*")
           .from("users")
           .where("email", "=", email)
           .then((user) => {
-            console.log(user);
             res.json(user[0]);
           })
           .catch((err) => res.status(400).json("unable to get user"));
@@ -118,7 +115,6 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
   const hash = bcrypt.hashSync(password);
-  console.log(hash);
   db.transaction((trx) => {
     trx
       .insert({
@@ -170,13 +166,31 @@ app.put("/loadedtransactions", (req, res) => {
     .where("email", "=", email)
     .then((data) => {
       res.json(data);
+      console.log(data);
     });
-
 });
 
 app.put("/transactions", (req, res) => {
-  const { email, type, date, amount, movements } = req.body;
-  db.select("email")
+  const { id, email, type, date, amount, movements } = req.body;
+  console.log(id, email, type, date, amount);
+  db.transaction((trx) => {
+    trx
+      .insert({
+        type: type,
+        date: date,
+        amount: amount,
+        email: email,
+      })
+      .into("movements")
+      .returning("*")
+      .then((data) => {
+        res.json(data);
+        console.log(data);
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  });
+  /*   db.select("email")
     .from("movements")
     .where("email", "=", email)
     .insert({
@@ -185,11 +199,12 @@ app.put("/transactions", (req, res) => {
       amount: amount,
       email: email,
     })
+    .into("movements")
     .then((data) => {
       console.log(data);
       res.json(data);
     });
-
+ */
   /*   let found = false;
   database.users.forEach((user) => {
     if (user.id === id && database.movementsTable[0].id === id) {
