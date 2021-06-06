@@ -25,53 +25,7 @@ db.select("*")
   .from("login")
   .then((data) => {});
 
-const database = {
-  users: [
-    {
-      id: "123",
-      name: "Admin",
-      email: "admin@gmail.com",
-      password: "123",
-      joined: new Date(),
-    },
-    {
-      id: "124",
-      name: "carl",
-      email: "carl@gmail.com",
-      password: "1234",
-      joined: new Date(),
-      movements: [
-        {
-          id: 0,
-          Type: "Withdrawal",
-          Date: "05/23/2021 at 17:11",
-          Amount: 0,
-        },
-      ],
-    },
-  ],
-  movementsTable: [
-    {
-      id: "123",
-      Type: "Deposit",
-      Date: "13/03.1991",
-      Amount: 100,
-    },
-    {
-      id: "123",
-      Type: "Withdrawal",
-      Date: "13/03.1991",
-      Amount: 50,
-    },
-  ],
-  login: [
-    {
-      id: "987",
-      hash: "",
-      email: "admin@gmail.com",
-    },
-  ],
-};
+
 
 const app = express();
 app.use(express.json());
