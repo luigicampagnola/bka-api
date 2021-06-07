@@ -118,7 +118,6 @@ app.put("/loadedtransactions", (req, res) => {
     .where("email", "=", email)
     .then((data) => {
       res.json(data);
-      console.log(data);
     });
 });
 
@@ -137,7 +136,6 @@ app.put("/transactions", (req, res) => {
       .returning("*")
       .then((data) => {
         res.json(data);
-        console.log(data);
       })
       .then(trx.commit)
       .catch(trx.rollback);
