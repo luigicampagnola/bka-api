@@ -122,8 +122,7 @@ app.put("/loadedtransactions", (req, res) => {
 });
 
 app.put("/transactions", (req, res) => {
-  const { id, email, type, date, amount, movements } = req.body;
-  console.log(id, email, type, date, amount);
+  const { email, type, date, amount } = req.body;
   db.transaction((trx) => {
     trx
       .insert({
