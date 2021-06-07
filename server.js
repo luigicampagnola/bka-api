@@ -25,8 +25,6 @@ db.select("*")
   .from("login")
   .then((data) => {});
 
-
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -144,33 +142,6 @@ app.put("/transactions", (req, res) => {
       .then(trx.commit)
       .catch(trx.rollback);
   });
-  /*   db.select("email")
-    .from("movements")
-    .where("email", "=", email)
-    .insert({
-      type: type,
-      date: date,
-      amount: amount,
-      email: email,
-    })
-    .into("movements")
-    .then((data) => {
-      console.log(data);
-      res.json(data);
-    });
- */
-  /*   let found = false;
-  database.users.forEach((user) => {
-    if (user.id === id && database.movementsTable[0].id === id) {
-      found = true;
-      database.movementsTable.push(movements);
-      return res.json(database.movementsTable);
-    }
-  });
-
-  if (!found) {
-    res.status(400).json("not found");
-  } */
 });
 
 app.listen(3000, () => {
