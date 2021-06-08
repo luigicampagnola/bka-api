@@ -5,6 +5,8 @@ const knex = require("knex");
 const register = require("./contollers/register");
 const signin = require("./contollers/signin");
 const profile = require("./contollers/profile");
+const { loadedtransactions } = require("./contollers/loadedTransactions");
+const loadedTransactions = require("./contollers/loadedTransactions");
 
 const db = knex({
   client: "pg",
@@ -57,14 +59,7 @@ app.get("/profile/:id", (req, res) => {
 });
 
 app.put("/loadedtransactions", (req, res) => {
-  const { email } = req.body;
-
-  db.select("*")
-    .from("movements")
-    .where("email", "=", email)
-    .then((data) => {
-      res.json(data);
-    });
+  loadedTransactions.loadedtransactionsHandler(req, res, db);
 });
 
 app.put("/transactions", (req, res) => {
