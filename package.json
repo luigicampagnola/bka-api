@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "start:dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "bcrypt-nodejs": "0.0.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "heroku": "^7.54.0",
     "knex": "^0.95.6",
     "nodemon": "^2.0.7",
     "pg": "^8.6.0"
