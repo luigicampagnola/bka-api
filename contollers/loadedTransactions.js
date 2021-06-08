@@ -1,4 +1,4 @@
-const loadedtransactionsHandler = (req, res) => {
+const loadedtransactionsHandler = (req, res, db) => {
   const { email } = req.body;
 
   db.select("*")
@@ -10,5 +10,5 @@ const loadedtransactionsHandler = (req, res) => {
 };
 
 module.exports = {
-  loadedtransactions: loadedtransactionsHandler,
+  loadedtransactionsHandler: loadedtransactionsHandler,
 };

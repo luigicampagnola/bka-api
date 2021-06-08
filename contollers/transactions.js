@@ -1,4 +1,4 @@
-const transactionHandler = (req, res) => {
+const transactionHandler = (req, res, db) => {
   const { email, type, date, amount } = req.body;
   db.transaction((trx) => {
     trx

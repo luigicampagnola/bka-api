@@ -5,8 +5,7 @@ const knex = require("knex");
 const register = require("./contollers/register");
 const signin = require("./contollers/signin");
 const profile = require("./contollers/profile");
-const { loadedtransactions } = require("./contollers/loadedTransactions");
-const loadedTransactions = require("./contollers/loadedTransactions");
+const loadedtransactions = require("./contollers/loadedtransactions");
 const transactions = require("./contollers/transactions");
 
 const db = knex({
@@ -60,7 +59,7 @@ app.get("/profile/:id", (req, res) => {
 });
 
 app.put("/loadedtransactions", (req, res) => {
-  loadedTransactions.loadedtransactionsHandler(req, res, db);
+  loadedtransactions.loadedtransactionsHandler(req, res, db);
 });
 
 app.put("/transactions", (req, res) => {
