@@ -4,6 +4,7 @@ const cors = require("cors");
 const knex = require("knex");
 const register = require("./contollers/register");
 const signin = require("./contollers/signin");
+const profile = require("./contollers/profile");
 
 const db = knex({
   client: "pg",
@@ -52,21 +53,7 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/profile/:id", (req, res) => {
-  const { id } = req.params;
-  db.select("*")
-    .from("users")
-    .where({
-      id: id,
-    })
-    .then((user) => {
-      if (user.length) {
-        res.json(user[0]);
-      } else {
-        res.status(400).json("Profile not found");
-      }
-    })
-
-    .catch((err) => res.status(400).json("Error getting user"));
+  profile.profileHandler(req, res, db);
 });
 
 app.put("/loadedtransactions", (req, res) => {
