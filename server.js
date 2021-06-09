@@ -2,11 +2,11 @@ const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
-const register = require("./contollers/register");
-const signin = require("./contollers/signin");
-const profile = require("./contollers/profile");
-const loadedtransactions = require("./contollers/loadedtransactions");
-const transactions = require("./contollers/transactions");
+const register = require("./controllers/register");
+const signin = require("./controllers/signin");
+const profile = require("./controllers/profile");
+const loadedtransactions = require("./controllers/loadedtransactions");
+const transactions = require("./controllers/transactions");
 
 const db = knex({
   client: "pg",
@@ -72,4 +72,3 @@ app.listen(PRT || 3000, () => {
   console.log(`app is running on port ${PRT}`);
 });
 
-console.log(PRT);
