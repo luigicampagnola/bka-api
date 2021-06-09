@@ -68,6 +68,6 @@ app.put("/transactions", (req, res) => {
 
 //add environmental variable to port3000
 
-app.listen(process.env.PRT || 3000, () => {
-  console.log(`app is running on port ${process.env.PRT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`app is running on port ${process.env.PORT}`);
 });
