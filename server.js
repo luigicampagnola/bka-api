@@ -11,10 +11,8 @@ const transactions = require("./controllers/transactions");
 const db = knex({
   client: "pg",
   connection: {
-    host: "postgresql-encircled-01739",
-    user: "postgres",
-    password: "789456",
-    database: "badb",
+    host: process.env.DATABASE_URL,
+    ssl: true,
   },
 });
 
